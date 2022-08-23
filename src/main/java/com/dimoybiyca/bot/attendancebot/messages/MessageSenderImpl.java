@@ -59,6 +59,33 @@ public class MessageSenderImpl implements MessageSender{
         sendMessage(sendMessage);
     }
 
+    @Override
+    public void sendMessageWithKeyboardMono(Message message, String text) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setText(text);
+        sendMessage.setParseMode("HTML");
+        sendMessage.setChatId(message.getChatId());
+
+        var markup = new ReplyKeyboardMarkup();
+        var keyboardRows = new ArrayList<KeyboardRow>();
+
+        KeyboardRow row1 = new KeyboardRow();
+        KeyboardRow row2 = new KeyboardRow();
+
+        row1.add("+");
+        row2.add("-");
+
+        keyboardRows.add(row1);
+        keyboardRows.add(row2);
+
+        markup.setKeyboard(keyboardRows);
+        markup.setResizeKeyboard(true);
+
+        sendMessage.setReplyMarkup(markup);
+
+        sendMessage(sendMessage);
+    }
+
     @Autowired
     public void setAttendanceBot(AttendanceBot attendanceBot) {
         this.attendanceBot = attendanceBot;

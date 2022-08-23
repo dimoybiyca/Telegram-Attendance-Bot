@@ -45,7 +45,7 @@ public class Router {
                 attendanceMessage.setAttend(message, 0);
                 break;
             case "/journal":
-                adminMessage.getJournal(message);
+                adminMessage.getList(message);
                 break;
             default:
                 regexpProcessor.process(message);

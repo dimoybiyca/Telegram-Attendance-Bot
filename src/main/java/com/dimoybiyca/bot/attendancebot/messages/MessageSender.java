@@ -10,4 +10,6 @@ public interface MessageSender {
     public void sendMessage(Message message, String text);
 
     public void sendMessageWithKeyboard(Message message, String text);
+
+    public void sendMessageWithKeyboardMono(Message message, String text);
 }

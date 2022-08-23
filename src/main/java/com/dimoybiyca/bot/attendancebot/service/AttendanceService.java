@@ -1,8 +1,11 @@
 package com.dimoybiyca.bot.attendancebot.service;
 
 import com.dimoybiyca.bot.attendancebot.model.Attendance;
+import com.dimoybiyca.bot.attendancebot.model.Subject;
 import com.dimoybiyca.bot.attendancebot.repository.AttendanceRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AttendanceService {
@@ -13,6 +16,13 @@ public class AttendanceService {
         this.attendanceRepository = attendanceRepository;
     }
 
+    public List<Attendance> findAll() {
+        return attendanceRepository.findAll();
+    }
+
+    public List<Attendance> findBySubject(Subject subject) {
+        return attendanceRepository.findBySubject1OrSubject2OrderById(subject, subject);
+    };
 
     public Attendance create(Attendance attendance) {
         try {
