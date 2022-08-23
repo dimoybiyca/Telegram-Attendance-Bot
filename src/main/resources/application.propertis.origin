@@ -1,0 +1,18 @@
+telegram.bot.username=
+telegram.bot.token=
+
+spring.main.allow-circular-references= true
+
+spring.sql.init.platform=
+spring.datasource.url=
+spring.datasource.username=
+spring.datasource.password=
+
+spring.jpa.database=POSTGRESQL
+spring.jpa.show-sql=true
+spring.jpa.generate-ddl=true
+spring.jpa.hibernate.ddl-auto=create
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+
+owner.chat.id=
+admin.chat.id=
