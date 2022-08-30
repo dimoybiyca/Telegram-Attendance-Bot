@@ -9,6 +9,7 @@ import com.dimoybiyca.bot.attendancebot.service.AttendanceService;
 import com.dimoybiyca.bot.attendancebot.service.ScheduleService;
 import com.dimoybiyca.bot.attendancebot.service.UserService;
 import com.dimoybiyca.bot.attendancebot.util.LessonCheck;
+import com.dimoybiyca.bot.attendancebot.util.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -30,42 +31,45 @@ public class AttendanceMessage {
 
     private final ScheduleService scheduleService;
 
+    private final Notification notification;
+
 
     @Autowired
     public AttendanceMessage(MessageSender messageSender,
                              UserService userService,
                              LessonCheck lessonCheck,
                              AttendanceService attendanceService,
-                             ScheduleService scheduleService) {
+                             ScheduleService scheduleService, Notification notification) {
         this.messageSender = messageSender;
         this.userService = userService;
         this.lessonCheck = lessonCheck;
         this.attendanceService = attendanceService;
         this.scheduleService = scheduleService;
+        this.notification = notification;
     }
 
 
-    public int setAttend(Message message, int value) {
+    public void setAttend(Message message, int value) {
 
         User sender = userService.readByChatId(message.getChatId());
 
         if(sender == null) {
             messageSender.sendMessageWithKeyboard(message, "Ви не зареєстровані, введіть /start щоб зареєструватись");
 
-            return -1;
+            return;
         }
 
         if(!lessonCheck.isLessonNow()) {
             messageSender.sendMessageWithKeyboard(message, "Зараз немає пари");
 
-            return -1;
+            return;
         }
 
         if(!lessonCheck.isLessonInSubGroup(sender.getSubGroup())) {
             messageSender.sendMessageWithKeyboard(message, "Зараз немає пари у "
                     + sender.getSubGroup() + " підгрупи");
 
-            return -1;
+            return;
         }
 
 
@@ -107,6 +111,8 @@ public class AttendanceMessage {
                         currentSubject2,
                         currentSubjectNumber);
                 attendanceService.create(newAttendance);
+
+                notification.notifyAllUsersAboutLes(currentSubject1, currentSubject2);
             }
         }
         Attendance currentAttendance = attendanceService.getLast();
@@ -137,6 +143,5 @@ public class AttendanceMessage {
         + "\nна " + subject.getName()
         + "\n(" + subject.getType() + ")");
 
-        return 0;
     }
 }

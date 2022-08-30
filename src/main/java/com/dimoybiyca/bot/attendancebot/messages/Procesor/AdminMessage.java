@@ -17,6 +17,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -99,76 +100,7 @@ public class AdminMessage {
             String subjectName = decoder.decodeSubject(message.getText());
             List<Subject> subjects = subjectService.findByName(subjectName);
 
-            if(subjects == null){
-                System.out.println("FIGVAM");
-                return;
-            }
-
-            if(subjectName != null) {
-                StringBuilder journalMessage = new StringBuilder("<code>");
-
-                List<Attendance> attendances = new ArrayList<>();
-
-                for(Subject tempSubject : subjects) {
-                    attendances.addAll(attendanceService.findBySubject(tempSubject));
-                }
-
-                journalMessage.append("Month          | ");
-                for(Attendance tempAtt : attendances) {
-
-                    if ((tempAtt.getDate().getMonth() + 1) < 10) {
-                        journalMessage.append(" ");
-                    }
-
-                    journalMessage.append(tempAtt.getDate().getMonth() + 1).append(" ");
-                }
-
-                journalMessage.append("\nDay            | ");
-                for(Attendance tempAtt : attendances) {
-
-                    if (convertToLocalDateViaMilisecond(tempAtt.getDate()).getDayOfMonth() < 10) {
-                        journalMessage.append(" ");
-                    }
-
-                    journalMessage.append(convertToLocalDateViaMilisecond(tempAtt.getDate()).getDayOfMonth())
-                            .append(" ");
-                }
-
-                journalMessage.append("\n");
-                for (int i = 0; i < 28; i++) {
-                    int variant = i + 1;
-
-                    User student = userService.readByVariant(variant);
-
-                    if(student != null) {
-                        if(String.valueOf(variant).length() == 1) {
-                            journalMessage.append(variant).append(" ");
-                        } else {
-                            journalMessage.append(variant);
-                        }
-                        journalMessage.append(" ");
-
-                        String[] name = student.getName().split(" ");
-                        journalMessage.append(name[0]);
-
-                        journalMessage.append(" ".repeat(Math.max(0, 12 - name[0].length())));
-
-                        journalMessage.append("|  ");
-
-                        for(Attendance tempAttendance : attendances) {
-                            journalMessage.append(tempAttendance.getAttendance()[i]).append("  ");
-                        }
-
-                        journalMessage.append("\n");
-                    }
-                }
-
-                journalMessage.append("</code>");
-                messageSender.sendMessageWithKeyboardMono(message, String.valueOf(journalMessage));
-
-            } else {
-                messageSender.sendMessageWithKeyboard(message, "Некоректний ввід");
-            }
+            this.sendJournal(subjects, message);
 
         } else {
             messageSender.sendMessageWithKeyboard(message, "Ви не можете виконати цю команду");
@@ -178,9 +110,88 @@ public class AdminMessage {
     public void getJournalBySubjectAndType(Message message) {
         if(isAdmin(message.getChatId())) {
 
+            String[] text = message.getText().split(" ");
+
+            String subjectName = decoder.decodeSubject(text[0]);
+            String subjectType = decoder.decodeType(text[1]);
+
+            List<Subject> subjects = Collections.singletonList(
+                    subjectService.findByNameAndType(subjectName, subjectType));
+
+            this.sendJournal(subjects, message);
 
         } else {
             messageSender.sendMessageWithKeyboard(message, "Ви не можете виконати цю команду");
+        }
+    }
+
+
+    private void sendJournal(List<Subject> subjectList, Message message) {
+
+        if(subjectList != null) {
+            StringBuilder journalMessage = new StringBuilder("<code>");
+
+            List<Attendance> attendances = new ArrayList<>();
+
+            for(Subject tempSubject : subjectList) {
+                attendances.addAll(attendanceService.findBySubject(tempSubject));
+            }
+
+            journalMessage.append("Month          | ");
+            for(Attendance tempAtt : attendances) {
+
+                if ((tempAtt.getDate().getMonth() + 1) < 10) {
+                    journalMessage.append(" ");
+                }
+
+                journalMessage.append(tempAtt.getDate().getMonth() + 1).append(" ");
+            }
+
+            journalMessage.append("\nDay            | ");
+            for(Attendance tempAtt : attendances) {
+
+                if (convertToLocalDateViaMilisecond(tempAtt.getDate()).getDayOfMonth() < 10) {
+                    journalMessage.append(" ");
+                }
+
+                journalMessage.append(convertToLocalDateViaMilisecond(tempAtt.getDate()).getDayOfMonth())
+                        .append(" ");
+            }
+
+            journalMessage.append("\n");
+            for (int i = 0; i < 28; i++) {
+                int variant = i + 1;
+
+                User student = userService.readByVariant(variant);
+
+                if(student != null) {
+                    if(String.valueOf(variant).length() == 1) {
+                        journalMessage.append(variant).append(" ");
+                    } else {
+                        journalMessage.append(variant);
+                    }
+                    journalMessage.append(" ");
+
+                    String[] name = student.getName().split(" ");
+                    journalMessage.append(name[0]);
+
+                    journalMessage.append(" ".repeat(Math.max(0, 12 - name[0].length())));
+
+                    journalMessage.append("|  ");
+
+                    for(Attendance tempAttendance : attendances) {
+                        journalMessage.append(tempAttendance.getAttendance()[i]).append("  ");
+                    }
+
+                    journalMessage.append("\n");
+                }
+            }
+
+            journalMessage.append("</code>");
+            messageSender.sendMessageWithKeyboardMono(message, String.valueOf(journalMessage));
+
+        } else {
+            messageSender.sendMessageWithKeyboard(message, "Некоректний ввід");
         }
     }
 

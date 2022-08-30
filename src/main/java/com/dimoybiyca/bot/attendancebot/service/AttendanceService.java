@@ -16,13 +16,9 @@ public class AttendanceService {
         this.attendanceRepository = attendanceRepository;
     }
 
-    public List<Attendance> findAll() {
-        return attendanceRepository.findAll();
-    }
-
     public List<Attendance> findBySubject(Subject subject) {
         return attendanceRepository.findBySubject1OrSubject2OrderById(subject, subject);
-    };
+    }
 
     public Attendance create(Attendance attendance) {
         try {
@@ -32,14 +28,13 @@ public class AttendanceService {
         }
     }
 
-    public Attendance update(Attendance attendance) {
+    public void update(Attendance attendance) {
         if (attendance != null) {
             Attendance oldAttendance = getLast();
             if (oldAttendance != null) {
-                return attendanceRepository.save(attendance);
+                attendanceRepository.save(attendance);
             }
         }
-        return null;
     }
 
     public Attendance getLast() {

@@ -6,24 +6,21 @@ import org.springframework.stereotype.Component;
 public class AbbreviationDecoder {
 
     public String decodeSubject(String abbreviation) {
-        if(abbreviation.equals("СП")) {
-            return "Системне програмування";
-        } else if (abbreviation.equals("АК")) {
-            return "Архітектура комп'ютерів";
-        } else {
-            return null;
-        }
+        return switch (abbreviation) {
+            case "СП" -> "Системне програмування";
+            case "АК" -> "Архітектура комп'ютерів";
+            case "РК" -> "Реконфігуровані комп'ютери";
+            case "ІПЗ" -> "Інженерія програмного забезпечення";
+            default -> null;
+        };
     }
 
     public String decodeType(String abbreviation) {
-        if(abbreviation.equals("Л")) {
-            return "Лекція";
-        } else if (abbreviation.equals("Лаб") || abbreviation.equals("Лб")) {
-            return "Лабораторна";
-        } else if (abbreviation.equals("П")) {
-            return "Практична";
-        } else {
-            return null;
-        }
+        return switch (abbreviation) {
+            case "Л" -> "Лекція";
+            case "Лаб", "Лб" -> "Лабораторна";
+            case "П" -> "Практична";
+            default -> null;
+        };
     }
 }

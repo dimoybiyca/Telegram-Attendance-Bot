@@ -16,7 +16,7 @@ public class MessageSenderImpl implements MessageSender{
 
     private AttendanceBot attendanceBot;
 
-    @Override
+
     public void sendMessage(SendMessage sendMessage) {
         try {
             attendanceBot.execute(sendMessage);
@@ -32,12 +32,45 @@ public class MessageSenderImpl implements MessageSender{
 
         this.sendMessage(sendMessage);
     }
+    public void sendMessage(long chatId, String text) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setText(text);
+        sendMessage.setChatId(chatId);
+
+        this.sendMessage(sendMessage);
+    }
 
     public void sendMessageWithKeyboard(Message message, String text) {
 
         SendMessage sendMessage = new SendMessage();
         sendMessage.setText(text);
         sendMessage.setChatId(message.getChatId());
+
+        var markup = new ReplyKeyboardMarkup();
+        var keyboardRows = new ArrayList<KeyboardRow>();
+
+        KeyboardRow row1 = new KeyboardRow();
+        KeyboardRow row2 = new KeyboardRow();
+
+        row1.add("+");
+        row2.add("-");
+
+        keyboardRows.add(row1);
+        keyboardRows.add(row2);
+
+        markup.setKeyboard(keyboardRows);
+        markup.setResizeKeyboard(true);
+
+        sendMessage.setReplyMarkup(markup);
+
+        sendMessage(sendMessage);
+    }
+
+    public void sendMessageWithKeyboard(long chatId, String text) {
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setText(text);
+        sendMessage.setChatId(chatId);
 
         var markup = new ReplyKeyboardMarkup();
         var keyboardRows = new ArrayList<KeyboardRow>();
@@ -85,6 +118,7 @@ public class MessageSenderImpl implements MessageSender{
 
         sendMessage(sendMessage);
     }
+
 
     @Autowired
     public void setAttendanceBot(AttendanceBot attendanceBot) {
