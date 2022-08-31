@@ -100,7 +100,7 @@ public class AdminMessage {
             String subjectName = decoder.decodeSubject(message.getText());
             List<Subject> subjects = subjectService.findByName(subjectName);
 
-            this.sendJournal(subjects, message);
+            this.sendJournal(subjects, message, subjectName);
 
         } else {
             messageSender.sendMessageWithKeyboard(message, "Ви не можете виконати цю команду");
@@ -118,7 +118,7 @@ public class AdminMessage {
             List<Subject> subjects = Collections.singletonList(
                     subjectService.findByNameAndType(subjectName, subjectType));
 
-            this.sendJournal(subjects, message);
+            this.sendJournal(subjects, message, subjectName);
 
         } else {
             messageSender.sendMessageWithKeyboard(message, "Ви не можете виконати цю команду");
@@ -126,7 +126,7 @@ public class AdminMessage {
     }
 
 
-    private void sendJournal(List<Subject> subjectList, Message message) {
+    private void sendJournal(List<Subject> subjectList, Message message, String subjectName) {
 
         if(subjectList != null) {
             StringBuilder journalMessage = new StringBuilder("<code>");
@@ -158,6 +158,7 @@ public class AdminMessage {
                         .append(" ");
             }
 
+            journalMessage.append("\n_______________|");
             journalMessage.append("\n");
             for (int i = 0; i < 28; i++) {
                 int variant = i + 1;
@@ -180,7 +181,19 @@ public class AdminMessage {
                     journalMessage.append("|  ");
 
                     for(Attendance tempAttendance : attendances) {
-                        journalMessage.append(tempAttendance.getAttendance()[i]).append("  ");
+                        if(student.getSubGroup() == 1) {
+                            if(tempAttendance.getSubject1().getName().equals(subjectName)) {
+                                journalMessage.append(tempAttendance.getAttendance()[i]).append("  ");
+                            } else {
+                                journalMessage.append("X  ");
+                            }
+                        } else if(student.getSubGroup() == 2) {
+                            if(tempAttendance.getSubject2().getName().equals(subjectName)) {
+                                journalMessage.append(tempAttendance.getAttendance()[i]).append("  ");
+                            } else {
+                                journalMessage.append("X  ");
+                            }
+                        }
                     }
 
                     journalMessage.append("\n");
