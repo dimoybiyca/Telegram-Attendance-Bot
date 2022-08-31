@@ -89,12 +89,18 @@ public class LessonCheck {
 
         List<Schedule> now = scheduleService.getLessonsNow();
 
+        boolean result = false;
+
         if(now.size() > 0) {
             for (Schedule subject : now) {
                 if (subject.getWeek() == 0) {
                     return true;
                 } else {
-                    return (subject.getWeek() - 1) == odd % 2;
+                     result = (subject.getWeek() - 1) == odd % 2;
+
+                     if(result == true) {
+                         return result;
+                     }
                 }
             }
         }
@@ -107,6 +113,8 @@ public class LessonCheck {
 
             List<Schedule> today = scheduleService.getLessonsNow();
 
+            boolean result;
+
             if(today.size() == 1) {
                 if(today.get(0).getGroup() == 0) {
                     return true;
@@ -115,7 +123,7 @@ public class LessonCheck {
                 return subGroup == today.get(0).getGroup();
             } else{
                 for (Schedule schedule : today) {
-                    if(schedule.getGroup() == subGroup) {
+                    if(schedule.getGroup() == subGroup || schedule.getGroup() == 0) {
                         return true;
                     }
                 }

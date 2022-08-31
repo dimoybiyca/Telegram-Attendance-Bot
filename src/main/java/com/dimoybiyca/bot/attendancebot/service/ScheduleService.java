@@ -43,13 +43,22 @@ public class ScheduleService {
         int currentLessonHour = lessonCheck.getLessonHour(LocalTime.now());
         List<Schedule> result = new ArrayList<>();
 
+        int dayInYear = current.getDayOfYear();
+        int odd = 0;
+        if(dayInYear > 1) {
+            odd = (current.getDayOfYear() - 1) / 7;
+        }
+
         if(currentLessonHour != -1) {
 
             List<Schedule> today = readByDay(current.getDayOfWeek().toString());
 
             for (Schedule subject : today) {
                 if (subject.getStartHour() == currentLessonHour) {
-                    result.add(subject);
+                    if(subject.getWeek() == 0
+                    || (subject.getWeek() - 1) == odd % 2) {
+                        result.add(subject);
+                    }
                 }
             }
         }

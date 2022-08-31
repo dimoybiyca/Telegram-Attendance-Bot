@@ -122,12 +122,13 @@ public class AttendanceMessage {
         attendanceService.update(currentAttendance);
 
 
-        Subject subject = null;
+        Subject subject = new Subject();
         if(today.size() == 1) {
             subject = today.get(0).getSubject();
         } else {
+
             for (Schedule schedule : today) {
-                if(schedule.getGroup() == sender.getSubGroup()) {
+                if(schedule.getGroup() == sender.getSubGroup() || schedule.getGroup() == 0) {
                     subject = schedule.getSubject();
                     break;
                 }

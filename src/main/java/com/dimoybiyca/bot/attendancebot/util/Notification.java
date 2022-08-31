@@ -36,9 +36,13 @@ public class Notification {
         for(User user : allUsers) {
 
             if(user.getVariant() < 14) {
-                messageSender.sendMessageWithKeyboard(user.getChatId(), "Зараз " + lessonSub1.getName());
+                if(lessonSub1 != null) {
+                    messageSender.sendMessageWithKeyboard(user.getChatId(), "Зараз " + lessonSub1.getName());
+                }
             } else {
-                messageSender.sendMessageWithKeyboard(user.getChatId(), "Зараз " + lessonSub2.getName());
+                if (lessonSub2 != null) {
+                    messageSender.sendMessageWithKeyboard(user.getChatId(), "Зараз " + lessonSub2.getName());
+                }
             }
         }
     }

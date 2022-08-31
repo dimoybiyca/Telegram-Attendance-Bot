@@ -34,21 +34,12 @@ public class Router {
     public void route(Message message) {
         System.out.println(message.getText());
 
-        switch(message.getText()) {
-            case "/start":
-                startMessage.startMes(message);
-                break;
-            case "+":
-                attendanceMessage.setAttend(message, 1);
-                break;
-            case "-":
-                attendanceMessage.setAttend(message, 0);
-                break;
-            case "/journal":
-                adminMessage.getList(message);
-                break;
-            default:
-                regexpProcessor.process(message);
+        switch (message.getText()) {
+            case "/start" -> startMessage.startMes(message);
+            case "+" -> attendanceMessage.setAttend(message, 1);
+            case "-" -> attendanceMessage.setAttend(message, 0);
+            case "/journal" -> adminMessage.getList(message);
+            default -> regexpProcessor.process(message);
         }
     }
 }
