@@ -24,6 +24,9 @@ public class Subject {
     @Column(name = "type")
     private String type;
 
+    @Column(name = "link")
+    private String link;
+
     @OneToMany(mappedBy = "subject", cascade = CascadeType.REMOVE)
     private List<Schedule> schedules;
 
@@ -56,6 +59,13 @@ public class Subject {
     }
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getLink() {
+        return link;
+    }
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public List<Schedule> getSchedules1() {

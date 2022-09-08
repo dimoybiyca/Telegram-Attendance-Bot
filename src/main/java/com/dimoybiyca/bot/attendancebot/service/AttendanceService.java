@@ -17,7 +17,7 @@ public class AttendanceService {
     }
 
     public List<Attendance> findBySubject(Subject subject) {
-        return attendanceRepository.findBySubject1OrSubject2OrderById(subject, subject);
+        return attendanceRepository.findBySubject1OrSubject2OrderByDate(subject, subject);
     }
 
     public Attendance create(Attendance attendance) {

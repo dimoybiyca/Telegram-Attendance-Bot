@@ -37,11 +37,15 @@ public class Notification {
 
             if(user.getVariant() < 14) {
                 if(lessonSub1 != null) {
-                    messageSender.sendMessageWithKeyboard(user.getChatId(), "Зараз " + lessonSub1.getName());
+                    messageSender.sendMessageWithKeyboard(user.getChatId(), "Зараз " + lessonSub1.getName()
+                            + "(" + lessonSub1.getType() + ")\n"
+                            + lessonSub1.getLink());
                 }
             } else {
                 if (lessonSub2 != null) {
-                    messageSender.sendMessageWithKeyboard(user.getChatId(), "Зараз " + lessonSub2.getName());
+                    messageSender.sendMessageWithKeyboard(user.getChatId(), "Зараз " + lessonSub2.getName()
+                            + "(" + lessonSub2.getType() + ")\n"
+                            + lessonSub2.getLink());
                 }
             }
         }

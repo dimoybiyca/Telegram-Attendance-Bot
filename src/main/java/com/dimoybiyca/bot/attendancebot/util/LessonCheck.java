@@ -50,28 +50,17 @@ public class LessonCheck {
     }
 
     public int getLessonHour(int number) {
-        if(number > 0 && number < 9) {
-            switch (number) {
-                case 1:
-                    return 8;
-                case 2:
-                    return 10;
-                case 3:
-                    return 12;
-                case 4:
-                    return 14;
-                case 5:
-                    return 16;
-                case 6:
-                    return 17;
-                case 7:
-                    return 19;
-                case 8:
-                    return 21;
-            }
-        }
-
-        return -1;
+            return switch (number) {
+                case 1 -> 8;
+                case 2 -> 10;
+                case 3 -> 12;
+                case 4 -> 14;
+                case 5 -> 16;
+                case 6 -> 17;
+                case 7 -> 19;
+                case 8 -> 21;
+                default -> -1;
+        };
     }
 
     public int getLessonHour(LocalTime localTime) {
@@ -98,8 +87,8 @@ public class LessonCheck {
                 } else {
                      result = (subject.getWeek() - 1) == odd % 2;
 
-                     if(result == true) {
-                         return result;
+                     if(result) {
+                         return true;
                      }
                 }
             }

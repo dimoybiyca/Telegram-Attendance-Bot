@@ -16,10 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class AdminMessage {
@@ -137,6 +134,8 @@ public class AdminMessage {
                 attendances.addAll(attendanceService.findBySubject(tempSubject));
             }
 
+            attendances.sort(Comparator.comparingLong(a -> a.getDate().getTime()));
+
             journalMessage.append("Month          | ");
             for(Attendance tempAtt : attendances) {
 
@@ -182,13 +181,15 @@ public class AdminMessage {
 
                     for(Attendance tempAttendance : attendances) {
                         if(student.getSubGroup() == 1) {
-                            if(tempAttendance.getSubject1().getName().equals(subjectName)) {
+                            if(tempAttendance.getSubject1() != null
+                                    && tempAttendance.getSubject1().getName().equals(subjectName)) {
                                 journalMessage.append(tempAttendance.getAttendance()[i]).append("  ");
                             } else {
                                 journalMessage.append("X  ");
                             }
                         } else if(student.getSubGroup() == 2) {
-                            if(tempAttendance.getSubject2().getName().equals(subjectName)) {
+                            if(tempAttendance.getSubject2() != null &&
+                                    tempAttendance.getSubject2().getName().equals(subjectName)) {
                                 journalMessage.append(tempAttendance.getAttendance()[i]).append("  ");
                             } else {
                                 journalMessage.append("X  ");
@@ -209,7 +210,8 @@ public class AdminMessage {
     }
 
     private boolean isAdmin(long chatId) {
-        return  chatId == adminChatId || chatId == ownerChatId;
+        return  chatId == adminChatId || chatId == ownerChatId
+                || chatId == 949421837;
     }
 
     private LocalDate convertToLocalDateViaMilisecond(Date dateToConvert) {

@@ -10,5 +10,5 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 
     Attendance findFirstByOrderByIdDesc();
 
-    List<Attendance> findBySubject1OrSubject2OrderById(Subject subject1, Subject subject2);
+    List<Attendance> findBySubject1OrSubject2OrderByDate(Subject subject1, Subject subject2);
 }
