@@ -36,7 +36,7 @@ public class Router {
 
         switch (message.getText()) {
             case "/start" -> startMessage.startMes(message);
-            case "+" -> attendanceMessage.setAttend(message, 1);
+            case "✙", "+" -> attendanceMessage.setAttend(message, 1);
             case "-" -> attendanceMessage.setAttend(message, 0);
             case "/journal" -> adminMessage.getList(message);
             default -> regexpProcessor.process(message);

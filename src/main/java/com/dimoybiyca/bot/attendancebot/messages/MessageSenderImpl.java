@@ -52,7 +52,7 @@ public class MessageSenderImpl implements MessageSender{
         KeyboardRow row1 = new KeyboardRow();
         KeyboardRow row2 = new KeyboardRow();
 
-        row1.add("+");
+        row1.add("✙");
         row2.add("-");
 
         keyboardRows.add(row1);
@@ -78,7 +78,7 @@ public class MessageSenderImpl implements MessageSender{
         KeyboardRow row1 = new KeyboardRow();
         KeyboardRow row2 = new KeyboardRow();
 
-        row1.add("+");
+        row1.add("✙");
         row2.add("-");
 
         keyboardRows.add(row1);
@@ -105,7 +105,7 @@ public class MessageSenderImpl implements MessageSender{
         KeyboardRow row1 = new KeyboardRow();
         KeyboardRow row2 = new KeyboardRow();
 
-        row1.add("+");
+        row1.add("✙");
         row2.add("-");
 
         keyboardRows.add(row1);
